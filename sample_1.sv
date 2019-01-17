@@ -8,14 +8,8 @@ module sample_1 (
   input i_bit_field_2_0,
   output o_bit_field_2_1
 );
+  `include "rggen_rtl_macros.svh"
   rggen_register_if #(7, 32) register_if[3]();
-  `define rggen_connect_bit_field_if(RIF, FIF, MSB, LSB) \
-    assign  FIF.read_access         = RIF.read_access; \
-    assign  FIF.write_access        = RIF.write_access; \
-    assign  FIF.write_data          = RIF.write_data[MSB:LSB]; \
-    assign  FIF.write_mask          = RIF.write_mask[MSB:LSB]; \
-    assign  RIF.value[MSB:LSB]      = FIF.value; \
-    assign  RIF.read_data[MSB:LSB]  = FIF.read_data;
   rggen_host_if_apb #(
     .LOCAL_ADDRESS_WIDTH  (7),
     .DATA_WIDTH           (32),
@@ -124,5 +118,4 @@ module sample_1 (
       );
     end
   end endgenerate
-  `undef rggen_connect_bit_field_if
 endmodule
