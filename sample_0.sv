@@ -2,7 +2,6 @@ module sample_0 (
   input clk,
   input rst_n,
   rggen_apb_if.slave apb_if,
-  output o_irq,
   output [15:0] o_bit_field_0_0,
   output [15:0] o_bit_field_0_1,
   output [31:0] o_bit_field_1_0,
@@ -25,8 +24,6 @@ module sample_0 (
 );
   `include "rggen_rtl_macros.svh"
   rggen_register_if #(8, 32) register_if[20]();
-  logic [1:0] ier;
-  logic [1:0] isr;
   rggen_host_if_apb #(
     .LOCAL_ADDRESS_WIDTH  (8),
     .DATA_WIDTH           (32),
@@ -36,17 +33,6 @@ module sample_0 (
     .rst_n        (rst_n),
     .apb_if       (apb_if),
     .register_if  (register_if)
-  );
-  assign ier = {register_if[2].value[0], register_if[2].value[0]};
-  assign isr = {register_if[16].value[8], register_if[16].value[0]};
-  rggen_irq_controller #(
-    .TOTAL_INTERRUPTS (2)
-  ) u_irq_controller (
-    .clk    (clk),
-    .rst_n  (rst_n),
-    .i_ier  (ier),
-    .i_isr  (isr),
-    .o_irq  (o_irq)
   );
   generate if (1) begin : g_register_0
     rggen_bit_field_if #(32) bit_field_if();
